@@ -1,8 +1,6 @@
 <?php
 
-namespace Messerli90\FirstPromoter\Api;
-
-use Messerli90\FirstPromoter\FirstPromoter;
+namespace Messerli90\FirstPromoter;
 
 class Tracking extends FirstPromoter
 {
@@ -22,12 +20,17 @@ class Tracking extends FirstPromoter
      * @param       $email
      * @param array $data
      *
-     * @return bool|object
+     * @return object
+     * @throws \Exception
      */
-    public function trackSignUp($wid, $email, $data = [])
+    public static function trackSignUp($wid, $email, $data = [])
     {
-        if ((empty($wid) || empty($email)) || (empty($data['tid']) && empty($data['ref_id']))) {
-            return false;
+        if ( empty($wid) || empty($email) ) {
+            throw new \Exception('Integration ID and Email are required.');
+        }
+
+        if ( empty($data['tid']) && empty($data['ref_id']) ) {
+            throw new \Exception('Either Visitor Tracking ID or Referral ID are required.');
         }
 
         $uri = 'track/signup';
@@ -42,7 +45,7 @@ class Tracking extends FirstPromoter
             'ip'            => optional($data['ip']),
         ];
 
-        return $this->request('POST', $uri, $body);
+        return self::request('POST', $uri, $body);
     }
 
     /**
@@ -53,12 +56,14 @@ class Tracking extends FirstPromoter
      * @param       $amount "Amount in cents"
      * @param array $data
      *
-     * @return bool|object
+     * @return object
+     * @throws \Exception
      */
-    public function trackSalesAndCommissions($email, $event_id, $amount, $data = [])
+    public static function trackSalesAndCommissions($email, $event_id, $amount, $data = [])
     {
-        if (empty($event_id) || empty($email) || empty($amount))
-            return false;
+        if (empty($event_id) || empty($email) || empty($amount)) {
+            throw new \Exception('Event ID, Email, and Amount are required.');
+        }
 
         $uri = 'track/sale';
         $body = [
@@ -73,7 +78,7 @@ class Tracking extends FirstPromoter
             'promo_code'    => optional($data['promo_code']),
         ];
 
-        return $this->request('POST', $uri, $body);
+        return self::request('POST', $uri, $body);
     }
 
 }

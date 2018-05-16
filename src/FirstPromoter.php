@@ -6,34 +6,18 @@ use GuzzleHttp\Client;
 
 class FirstPromoter
 {
+    /**
+     *
+     */
     const BASE_URI = 'https://firstpromoter.com/api/v1/';
 
     /**
      * @var string $key
      */
-    protected $key;
+    protected static $key;
 
     /**
-     * @var Client $client
-     */
-    protected $client;
-
-    /**
-     * FirstPromoter constructor.
-     *
-     * @param $key
-     */
-    public function __construct($key = null)
-    {
-        $this->key = $key;
-
-        $this->client = new Client([
-            'base_uri' => self::BASE_URI
-        ]);
-    }
-
-    /**
-     * Makes a public request
+     * Makes a request to the FP API
      *
      * @param string $method
      * @param string $uri
@@ -41,16 +25,49 @@ class FirstPromoter
      *
      * @return object
      */
-    protected function request($method, $uri, $data = [])
+    protected static function request($method, $uri, $data = [])
     {
-        $res = $this->client->request($method, $uri, [
+        $client = new Client([
+            'base_uri' => self::BASE_URI
+        ]);
+
+        $res = $client->request($method, $uri, [
             'headers' => [
-                "x-api-key" => $this->key
+                "x-api-key" => self::getApiKey()
             ],
             'json' => $data
         ]);
 
 
         return json_decode($res->getBody()->getContents());
+    }
+
+    /**
+     * Set the First Promoter API Key
+     *
+     * @param $key
+     * @return void
+     */
+    public static function setApiKey($key)
+    {
+        static::$key = $key;
+    }
+
+    /**
+     * Get the First Promoter API Key
+     *
+     * @return string
+     */
+    public static function getApiKey()
+    {
+        if (static::$key) {
+            return static::$key;
+        }
+
+        if ($key = getenv('FIRST_PROMOTER_KEY')) {
+            return $key;
+        }
+
+        return config('services.first_promoter.key');
     }
 }
