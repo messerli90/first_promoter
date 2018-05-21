@@ -7,7 +7,7 @@ use Exception;
 class Promoter extends FirstPromoter
 {
     /**
-     * Use this endpoint to create new promoters
+     * Creates a new promoter
      *
      * @param       $email
      * @param array $options
@@ -25,89 +25,65 @@ class Promoter extends FirstPromoter
     }
 
     /**
-     * Identify promoters
+     * Identifies promoters
      *
-     * @param null $id
-     * @param null $cust_id
-     * @param null $ref_id
-     * @param null $auth_token
+     * @param array $options
      *
      * @return object
      * @throws \Exception
+     *
      */
-    public static function show($id = null, $cust_id = null, $ref_id = null, $auth_token = null)
+    public static function show(array $options)
     {
-        if (empty($id) && empty($cust_id) && empty($ref_id) && empty($auth_token)) {
-            throw new Exception('ID, UID, or Email are required.');
+        if (! array_key_exists('id', $options) && ! array_key_exists('cust_id', $options)
+            && ! array_key_exists('ref_id', $options) && ! array_key_exists('auth_token', $options)) {
+            throw new Exception('ID, Customer ID, Referral ID, or Auth Token are required.');
         }
-
-        $options = [
-            'id' => $id,
-            'cust_id' => $cust_id,
-            'ref_id' => $ref_id,
-            'auth_token' => $auth_token
-        ];
 
         return self::request('GET', 'promoters/show', $options);
     }
 
     /**
-     * Modify existing promoter
+     * Modifies existing promoter
      *
-     * @param null $id
-     * @param null $cust_id
-     * @param null $ref_id
-     * @param null $auth_token
+     * @param array $options
      *
      * @return object
      * @throws \Exception
      *
      */
-    public static function update($id = null, $cust_id = null, $ref_id = null, $auth_token = null)
+    public static function update(array $options)
     {
-        if (empty($id) && empty($cust_id) && empty($ref_id) && empty($auth_token)) {
+        if (! array_key_exists('id', $options) && ! array_key_exists('cust_id', $options)
+            && ! array_key_exists('ref_id', $options) && ! array_key_exists('auth_token', $options)) {
             throw new Exception('ID, Customer ID, Referral ID, or Auth Token are required.');
         }
-
-        $options = [
-            'id' => $id,
-            'cust_id' => $cust_id,
-            'ref_id' => $ref_id,
-            'auth_token' => $auth_token
-        ];
 
         return self::request('PUT', 'promoters/update', $options);
     }
 
 
     /**
-     * @param null $id
-     * @param null $cust_id
-     * @param null $ref_id
-     * @param null $auth_token
+     * Deletes a promoter
+     *
+     * @param array $options
      *
      * @return object
      * @throws \Exception
      *
      */
-    public static function delete($id = null, $cust_id = null, $ref_id = null, $auth_token = null)
+    public static function delete(array $options)
     {
-        if (empty($id) && empty($cust_id) && empty($ref_id) && empty($auth_token)) {
+        if (! array_key_exists('id', $options) && ! array_key_exists('cust_id', $options)
+            && ! array_key_exists('ref_id', $options) && ! array_key_exists('auth_token', $options)) {
             throw new Exception('ID, Customer ID, Referral ID, or Auth Token are required.');
         }
-
-        $options = [
-            'id' => $id,
-            'cust_id' => $cust_id,
-            'ref_id' => $ref_id,
-            'auth_token' => $auth_token
-        ];
 
         return self::request('DELETE', 'promoters/delete', $options);
     }
 
     /**
-     * Resetting authentication token(auth_token) which is used to automatically sign in your promoters
+     * Resets authentication token(auth_token) which is used to automatically sign in your promoters
      *
      * @param null $id
      * @param null $cust_id

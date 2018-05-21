@@ -11,6 +11,8 @@ class Reward extends FirstPromoter
     const ALLOWED_STATUS = ['approved', 'pending', 'denied'];
 
     /**
+     * Create a new reward
+     *
      * @param       $type
      * @param       $amount
      * @param array $options

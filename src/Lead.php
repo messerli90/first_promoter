@@ -8,6 +8,8 @@ class Lead extends FirstPromoter
 {
 
     /**
+     * Creates a new lead
+     *
      * @param       $email
      * @param array $options
      *
@@ -28,25 +30,57 @@ class Lead extends FirstPromoter
     }
 
     /**
-     * @param null $id
-     * @param null $uid
-     * @param null $email
+     * Identifies an existing lead
+     *
+     * @param array $options
+     *
+     * @return object
+     * @throws \Exception
+     *
+     */
+    public static function show(array $options = [])
+    {
+        if (! array_key_exists('id', $options) && ! array_key_exists('uid', $options)
+            && ! array_key_exists('email', $options)) {
+            throw new Exception('ID, UID, or Email are required.');
+        }
+
+        return self::request('GET', 'leads/show', $options);
+    }
+
+    /**
+     * Updates an existing lead
+     *
+     * @param array $options
      *
      * @return object
      * @throws \Exception
      */
-    public function show($id = null, $uid = null, $email = null)
+    public static function update(array $options = [])
     {
-        if (empty($id) && empty($uid) && empty($email)) {
+        if (! array_key_exists('id', $options) && ! array_key_exists('uid', $options)
+            && ! array_key_exists('email', $options)) {
             throw new Exception('ID, UID, or Email are required.');
         }
 
-        $options = [
-            'id' => $id,
-            'uid' => $uid,
-            'email' => $email,
-        ];
+        return self::request('PUT', 'leads/update', $options);
+    }
 
-        return $this->request('GET', 'leads/show', $options);
+    /**
+     * Deletes a lead
+     *
+     * @param array $options
+     *
+     * @return object
+     * @throws \Exception
+     */
+    public static function delete(array $options = [])
+    {
+        if (! array_key_exists('id', $options) && ! array_key_exists('uid', $options)
+            && ! array_key_exists('email', $options)) {
+            throw new Exception('ID, UID, or Email are required.');
+        }
+
+        return self::request('DELETE', 'leads/delete', $options);
     }
 }
