@@ -32,7 +32,7 @@ class Tracking extends FirstPromoter
             throw new Exception('Integration ID and Email are required.');
         }
 
-        if ( empty($data['tid']) && empty($data['ref_id']) ) {
+        if ( empty($options['tid']) && empty($options['ref_id']) ) {
             throw new Exception('Either Visitor Tracking ID or Referral ID are required.');
         }
 
