@@ -102,20 +102,21 @@ class Tracking extends FirstPromoter
      *
      * @param      $email
      * @param null $uid
+     * @param array $options
      *
      * @return object
      * @throws \Exception
      */
-    public static function trackCancellation($email, $uid = null)
+    public static function trackCancellation($email, $uid = null, array $options = [])
     {
         if (empty($email)) {
             throw new Exception('Email is required.');
         }
 
-        $options = [
+        $options = array_merge([
             'email'     => $email,
             'uid'       => $uid
-        ];
+        ], $options);
 
         return self::request('POST', 'track/cancellation', $options);
     }
